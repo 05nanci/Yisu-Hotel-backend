@@ -62,7 +62,7 @@ const searchHotelsService = async (params) => {
   ]);
 
   // 格式化酒店数据
-  const formattedHotels = hotels.map(hotel => {
+  const formattedHotels = await Promise.all(hotels.map(async (hotel) => {
     const facilities = hotel.hotelFacilities.map(hf => ({
       id: hf.facility_id,
       name: hf.facility?.name || ''
@@ -73,6 +73,35 @@ const searchHotelsService = async (params) => {
       name: hs.service?.name || ''
     }));
 
+    // 处理主图片URL
+    let mainImageUrl = hotel.main_image_url?.[0] || '';
+    if (!mainImageUrl || mainImageUrl.includes('example.com')) {
+      mainImageUrl = 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20hotel%20exterior%20building%20architecture&image_size=landscape_4_3';
+    }
+
+    // 从数据库获取最低价格
+    const roomTypes = await RoomType.findAll({
+      where: { hotel_id: hotel.id }
+    });
+
+    let minPrice = 259.00; // 默认价格
+    if (roomTypes.length > 0) {
+      // 获取所有房型的价格
+      const roomPrices = await Promise.all(roomTypes.map(async (roomType) => {
+        const prices = await RoomPrice.findAll({
+          where: { room_type_id: roomType.id },
+          attributes: ['price']
+        });
+        return prices.map(p => p.price);
+      }));
+
+      // 扁平化价格数组
+      const allPrices = roomPrices.flat();
+      if (allPrices.length > 0) {
+        minPrice = Math.min(...allPrices);
+      }
+    }
+
     return {
       id: hotel.id,
       name: hotel.hotel_name_cn,
@@ -81,12 +110,12 @@ const searchHotelsService = async (params) => {
       address: hotel.location_info?.formatted_address || '',
       distance: Math.random() * 5, // 模拟距离
       description: hotel.description,
-      main_image_url: hotel.main_image_url?.[0] || '',
-      min_price: hotel.min_price || 0,
+      main_image_url: mainImageUrl,
+      min_price: minPrice,
       facilities,
       services
     };
-  });
+  }));
 
   return {
     total,
@@ -169,16 +198,23 @@ const getHotelDetailService = async (hotel_id) => {
   // 格式化房型
   const roomTypesWithPrices = await Promise.all(
     roomTypes.map(async (roomType) => {
-      // 生成未来30天的价格
-      const prices = [];
-      const today = new Date();
-      for (let i = 0; i < 30; i++) {
-        const date = new Date(today);
-        date.setDate(date.getDate() + i);
-        const dateString = date.toISOString().split('T')[0];
+      // 从数据库获取价格
+      const roomPrices = await RoomPrice.findAll({
+        where: { room_type_id: roomType.id },
+        attributes: ['price_date', 'price']
+      });
+
+      // 转换为前端需要的格式
+      const prices = roomPrices.map(rp => ({
+        date: rp.price_date,
+        price: rp.price
+      }));
+
+      // 如果数据库中没有价格，使用默认价格
+      if (prices.length === 0) {
         prices.push({
-          date: dateString,
-          price: Math.floor(300 + Math.random() * 200) // 模拟价格
+          date: new Date().toISOString().split('T')[0],
+          price: 259.00 // 默认价格
         });
       }
 
@@ -188,7 +224,7 @@ const getHotelDetailService = async (hotel_id) => {
         bed_type: roomType.bed_type,
         area: roomType.area,
         description: roomType.description,
-        room_image_url: `http://example.com/room_${roomType.id}.jpg`, // 模拟数据
+        room_image_url: `https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hotel%20room%20interior%20${roomType.id}%20default%20placeholder&image_size=landscape_4_3`, // 默认占位图片
         tags: ['推荐', '高楼层', '景观房'], // 模拟数据
         facilities: [], // 模拟数据
         services: [], // 模拟数据
@@ -203,6 +239,19 @@ const getHotelDetailService = async (hotel_id) => {
     })
   );
 
+  // 处理主图片URL
+  let mainImageUrl = hotel.main_image_url || [];
+  if (Array.isArray(mainImageUrl)) {
+    mainImageUrl = mainImageUrl.map(url => {
+      if (!url || url.includes('example.com')) {
+        return 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20hotel%20exterior%20building%20architecture&image_size=landscape_4_3';
+      }
+      return url;
+    });
+  } else if (!mainImageUrl || mainImageUrl.includes('example.com')) {
+    mainImageUrl = ['https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20hotel%20exterior%20building%20architecture&image_size=landscape_4_3'];
+  }
+
   return {
     hotel_id: hotel.id,
     hotel_name_cn: hotel.hotel_name_cn,
@@ -214,7 +263,7 @@ const getHotelDetailService = async (hotel_id) => {
     phone: hotel.phone || '',
     opening_date: hotel.opening_date || '',
     nearby_info: hotel.nearby_info || '',
-    main_image_url: hotel.main_image_url || [],
+    main_image_url: mainImageUrl,
     tags: hotel.tags || [],
     location_info: hotel.location_info || {},
     favorite_count: Math.floor(Math.random() * 1000), // 模拟数据
@@ -562,21 +611,59 @@ const getHotelListService = async (params) => {
     console.log('Found hotels:', hotels.length, 'total:', total);
 
     // 格式化酒店数据
-    const formattedHotels = hotels.map(hotel => ({
-      hotel_id: hotel.id,
-      hotel_name_cn: hotel.hotel_name_cn,
-      hotel_name_en: hotel.hotel_name_en,
-      star_rating: hotel.star_rating,
-      rating: hotel.rating || 0,
-      nearby_info: hotel.nearby_info || '',
-      main_image_url: hotel.main_image_url || [],
-      tags: hotel.tags || [],
-      location_info: hotel.location_info || {},
-      favorite_count: Math.floor(Math.random() * 1000), // 模拟数据
-      average_rating: hotel.rating || 0,
-      booking_count: Math.floor(Math.random() * 5000), // 模拟数据
-      review_count: Math.floor(Math.random() * 1000), // 模拟数据
-      min_price: Math.floor(Math.random() * 3000) + 500 // 模拟数据，500-3500之间的随机价格
+    const formattedHotels = await Promise.all(hotels.map(async (hotel) => {
+      // 处理主图片URL
+      let mainImageUrl = hotel.main_image_url || [];
+      if (Array.isArray(mainImageUrl)) {
+        mainImageUrl = mainImageUrl.map(url => {
+          if (!url || url.includes('example.com')) {
+            return 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20hotel%20exterior%20building%20architecture&image_size=landscape_4_3';
+          }
+          return url;
+        });
+      } else if (!mainImageUrl || mainImageUrl.includes('example.com')) {
+        mainImageUrl = ['https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20hotel%20exterior%20building%20architecture&image_size=landscape_4_3'];
+      }
+
+      // 从数据库获取最低价格
+      const roomTypes = await RoomType.findAll({
+        where: { hotel_id: hotel.id }
+      });
+
+      let minPrice = 259.00; // 默认价格
+      if (roomTypes.length > 0) {
+        // 获取所有房型的价格
+        const roomPrices = await Promise.all(roomTypes.map(async (roomType) => {
+          const prices = await RoomPrice.findAll({
+            where: { room_type_id: roomType.id },
+            attributes: ['price']
+          });
+          return prices.map(p => p.price);
+        }));
+
+        // 扁平化价格数组
+        const allPrices = roomPrices.flat();
+        if (allPrices.length > 0) {
+          minPrice = Math.min(...allPrices);
+        }
+      }
+
+      return {
+        hotel_id: hotel.id,
+        hotel_name_cn: hotel.hotel_name_cn,
+        hotel_name_en: hotel.hotel_name_en,
+        star_rating: hotel.star_rating,
+        rating: hotel.rating || 0,
+        nearby_info: hotel.nearby_info || '',
+        main_image_url: mainImageUrl,
+        tags: hotel.tags || [],
+        location_info: hotel.location_info || {},
+        favorite_count: Math.floor(Math.random() * 1000), // 模拟数据
+        average_rating: hotel.rating || 0,
+        booking_count: Math.floor(Math.random() * 5000), // 模拟数据
+        review_count: Math.floor(Math.random() * 1000), // 模拟数据
+        min_price: minPrice
+      };
     }));
 
     console.log('Formatted hotels:', formattedHotels.length);

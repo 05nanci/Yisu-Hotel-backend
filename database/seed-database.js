@@ -205,9 +205,9 @@ async function seedHotels() {
       opening_date: '2020-01-01',
       nearby_info: '距离地铁站500米，周边有商场、餐厅',
       main_image_url: [
-        'https://example.com/hotel1.jpg',
-        'https://example.com/hotel2.jpg',
-        'https://example.com/hotel3.jpg'
+        'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20hotel%20exterior%20building%20architecture&image_size=landscape_4_3',
+        'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hotel%20lobby%20interior%20modern%20design&image_size=landscape_4_3',
+        'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hotel%20room%20interior%20comfortable%20bed&image_size=landscape_4_3'
       ],
       tags: ['亲子友好', '免费停车场', '含早餐'],
       location_info: {
@@ -234,7 +234,7 @@ async function seedHotels() {
       opening_date: '2019-06-15',
       nearby_info: '靠近陆家嘴金融中心',
       main_image_url: [
-        'https://example.com/hotel4.jpg'
+        'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=shanghai%20hotel%20modern%20exterior&image_size=landscape_4_3'
       ],
       tags: ['商务', '交通便利'],
       location_info: {
@@ -261,7 +261,7 @@ async function seedHotels() {
       opening_date: '2021-03-01',
       nearby_info: '距离海滩100米',
       main_image_url: [
-        'https://example.com/hotel5.jpg'
+        'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=seaview%20hotel%20exterior%20ocean%20view&image_size=landscape_4_3'
       ],
       tags: ['海景', '豪华', '度假'],
       location_info: {
@@ -300,7 +300,7 @@ async function seedRoomTypes() {
       bed_type: 'king',
       area: 35,
       description: '豪华大床房，配备舒适的大床，适合情侣或独自出行。房间宽敞明亮，装修现代，设施齐全。',
-      room_image_url: 'https://example.com/room1.jpg'
+      room_image_url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=deluxe%20king%20bedroom%20hotel%20room&image_size=landscape_4_3'
     },
     {
       hotel_id: hotels[0].id,
@@ -308,7 +308,7 @@ async function seedRoomTypes() {
       bed_type: 'twin',
       area: 40,
       description: '舒适双床房，配备两张单人床，适合朋友或商务出行。房间布局合理，采光良好。',
-      room_image_url: 'https://example.com/room2.jpg'
+      room_image_url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=twin%20beds%20hotel%20room%20comfortable&image_size=landscape_4_3'
     },
     {
       hotel_id: hotels[0].id,
@@ -316,7 +316,7 @@ async function seedRoomTypes() {
       bed_type: 'king',
       area: 60,
       description: '豪华套房，配备独立客厅和卧室，适合家庭或商务接待。空间宽敞，设施豪华。',
-      room_image_url: 'https://example.com/room3.jpg'
+      room_image_url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=luxury%20hotel%20suite%20living%20room&image_size=landscape_4_3'
     },
     {
       hotel_id: hotels[1].id,
@@ -324,7 +324,7 @@ async function seedRoomTypes() {
       bed_type: 'queen',
       area: 30,
       description: '标准间，性价比高，适合商务出差。',
-      room_image_url: 'https://example.com/room4.jpg'
+      room_image_url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=standard%20hotel%20room%20budget&image_size=landscape_4_3'
     }
   ];
 
@@ -681,7 +681,7 @@ async function seedBanners() {
   const banners = [
     {
       id: 'banner_001',
-      image_url: 'https://example.com/banner1.jpg',
+      image_url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hotel%20promotion%20banner%20spring%20festival&image_size=landscape_4_3',
       title: '春节特惠，低至 8 折',
       description: '精选酒店春节促销',
       target_type: 'hotel',
@@ -693,7 +693,7 @@ async function seedBanners() {
     },
     {
       id: 'banner_002',
-      image_url: 'https://example.com/banner2.jpg',
+      image_url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=new%20user%20hotel%20discount%20banner&image_size=landscape_4_3',
       title: '新用户专享优惠',
       description: '首次预订立减 50 元',
       target_type: 'promotion',
@@ -705,11 +705,11 @@ async function seedBanners() {
     },
     {
       id: 'banner_003',
-      image_url: 'https://example.com/banner3.jpg',
+      image_url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=summer%20hotel%20promotion%20banner&image_size=landscape_4_3',
       title: '夏季特惠',
       description: '夏季酒店促销',
       target_type: 'url',
-      url: 'https://example.com/promotion',
+      url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hotel%20promotion%20page&image_size=landscape_4_3',
       sort: 3,
       start_time: new Date('2026-06-01T00:00:00Z'),
       end_time: new Date('2026-08-31T23:59:59Z'),
@@ -770,14 +770,14 @@ async function seedUserThirdPartyAuths() {
       provider: 'wechat',
       open_id: 'wx_openid_001',
       nickname: '微信用户1',
-      avatar: 'https://example.com/avatar1.jpg'
+      avatar: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=user%20avatar%20male%20default&image_size=square'
     },
     {
       user_id: users[1].id,
       provider: 'alipay',
       open_id: 'ali_openid_001',
       nickname: '支付宝用户1',
-      avatar: 'https://example.com/avatar2.jpg'
+      avatar: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=user%20avatar%20female%20default&image_size=square'
     }
   ];
 
@@ -996,14 +996,14 @@ async function seedUserProfiles() {
       nickname: '张三',
       gender: '男',
       birthday: '1990-01-01',
-      avatar: 'https://example.com/avatar1.jpg'
+      avatar: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=user%20profile%20avatar%20male&image_size=square'
     },
     {
       user_id: users[1].id,
       nickname: '李四',
       gender: '女',
       birthday: '1995-06-15',
-      avatar: 'https://example.com/avatar2.jpg'
+      avatar: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=user%20profile%20avatar%20female&image_size=square'
     }
   ];
 
@@ -1033,8 +1033,8 @@ async function seedHotelReviews() {
       rating: 5.0,
       content: '酒店非常好，服务周到，房间干净整洁。地理位置优越，交通便利。下次还会选择这家酒店！',
       images: [
-        'https://example.com/review1.jpg',
-        'https://example.com/review2.jpg'
+        'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hotel%20review%20room%20photo&image_size=landscape_4_3',
+        'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hotel%20review%20bathroom%20photo&image_size=landscape_4_3'
       ],
       is_anonymous: false
     },
@@ -1046,7 +1046,7 @@ async function seedHotelReviews() {
       rating: 4.5,
       content: '酒店环境不错，但是早餐种类可以再丰富一些。总体来说还是满意的。',
       images: [
-        'https://example.com/review3.jpg'
+        'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hotel%20review%20lobby%20photo&image_size=landscape_4_3'
       ],
       is_anonymous: true
     },
@@ -1068,9 +1068,9 @@ async function seedHotelReviews() {
       rating: 4.8,
       content: '海景房视野开阔，风景优美。酒店设施齐全，服务周到。强烈推荐！',
       images: [
-        'https://example.com/review4.jpg',
-        'https://example.com/review5.jpg',
-        'https://example.com/review6.jpg'
+        'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=seaview%20hotel%20room%20ocean%20view&image_size=landscape_4_3',
+        'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=seaview%20hotel%20pool%20ocean%20view&image_size=landscape_4_3',
+        'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=seaview%20hotel%20bathroom%20ocean%20view&image_size=landscape_4_3'
       ],
       is_anonymous: false
     },

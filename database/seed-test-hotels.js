@@ -25,7 +25,7 @@ const testHotelData = [
     opening_date: '2022-01-01',
     nearby_info: '朝阳公园附近',
     main_image_url: [
-      'https://example.com/test-hotel-1.jpg'
+      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=test%20hotel%20chaoyang%20branch&image_size=landscape_4_3'
     ],
     tags: ['测试', '商户'],
     location_info: {
@@ -52,7 +52,7 @@ const testHotelData = [
     opening_date: '2022-02-01',
     nearby_info: '中关村附近',
     main_image_url: [
-      'https://example.com/test-hotel-2.jpg'
+      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=test%20hotel%20haidian%20branch&image_size=landscape_4_3'
     ],
     tags: ['测试', '审核中'],
     location_info: {
@@ -79,7 +79,7 @@ const testHotelData = [
     opening_date: '2022-03-01',
     nearby_info: '国贸附近',
     main_image_url: [
-      'https://example.com/test-hotel-3.jpg'
+      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=test%20hotel%20approved&image_size=landscape_4_3'
     ],
     tags: ['测试', '已通过'],
     location_info: {
@@ -106,7 +106,7 @@ const testHotelData = [
     opening_date: '2022-04-01',
     nearby_info: '望京附近',
     main_image_url: [
-      'https://example.com/test-hotel-4.jpg'
+      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=test%20hotel%20rejected&image_size=landscape_4_3'
     ],
     tags: ['测试', '已拒绝'],
     location_info: {
@@ -176,7 +176,7 @@ async function seedTestRoomTypes() {
         bed_type: 'queen',
         area: 28,
         description: '测试酒店标准间，适合接口测试。',
-        room_image_url: 'https://example.com/test-room.jpg'
+        room_image_url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=test%20hotel%20standard%20room&image_size=landscape_4_3'
       }
     });
     roomTypes.push(roomType);

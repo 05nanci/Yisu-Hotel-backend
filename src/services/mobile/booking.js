@@ -38,7 +38,13 @@ const createBookingService = async (user_id, bookingData) => {
     throw error;
   }
   
-  if (checkIn < new Date()) {
+  // 只比较日期部分，不比较时间部分
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const checkInDate = new Date(checkIn);
+  checkInDate.setHours(0, 0, 0, 0);
+
+  if (checkInDate < today) {
     const error = new Error('入住日期不能早于今天');
     error.code = 3004;
     error.httpStatus = 400;

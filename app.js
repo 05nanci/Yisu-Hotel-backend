@@ -71,6 +71,16 @@ app.use('/mobile/nearby', mobileNearbyRoutes);
 app.use('/mobile/coupon', mobileCouponRoutes);
 app.use('/mobile/history', mobileHistoryRoutes);
 
+// 全局错误处理中间件
+app.use((err, req, res, next) => {
+  console.error('全局错误:', err);
+  res.status(500).json({
+    code: 500,
+    msg: '服务器内部错误',
+    data: null
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Express服务运行在：http://localhost:${PORT}`);
   
@@ -83,14 +93,4 @@ app.listen(PORT, () => {
     .catch((error) => {
       console.error('❌ 数据库连接失败:', error);
     });
-});
-
-// 全局错误处理中间件
-app.use((err, req, res, next) => {
-  console.error('全局错误:', err);
-  res.status(500).json({
-    code: 500,
-    msg: '服务器内部错误',
-    data: null
-  });
 });
